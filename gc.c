@@ -76,7 +76,6 @@ void unregisterPointer(void** pointer){
           prev->next = ptr->next;
         else
           current->pointers = ptr->next;
-        fprintf(stderr, "%p\n",ptr->pointer);
         free(ptr);
         return;
       }
@@ -114,6 +113,7 @@ int countMemoryEntries(){
   MemoryEntry* current = memoryList;
   while(current){
     if(current->pointers)
+      fprintf(stderr, "%d: %p\n", count, current->pointers);
       count++;
     current = current->next;
   }
