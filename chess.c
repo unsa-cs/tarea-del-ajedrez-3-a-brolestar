@@ -1,4 +1,4 @@
-//#include <stdio.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include "chess.h"
 #include "gc.h"
@@ -28,6 +28,7 @@ char** reverse(char** fig){
   while(fig[0][++cols]);
 
   char** newFig = allocateMemory(rows, cols);
+  fprintf(stderr, "newFig: %p\n", newFig);
 
   for(int i = 0; fig[i]; i++){
     for(int j = 0; fig[0][j]; j++)
