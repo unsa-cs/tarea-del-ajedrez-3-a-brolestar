@@ -72,6 +72,7 @@ void unregisterPointer(void** pointer){
     PointerNode* ptr = current->pointers;
     while(ptr){
       if(ptr->pointer == pointer){
+        fprintf(stderr,"%p\n", pointer);
         if(prev)
           prev->next = ptr->next;
         else
