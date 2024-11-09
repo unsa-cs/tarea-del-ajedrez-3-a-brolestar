@@ -112,9 +112,10 @@ int countMemoryEntries(){
   int count = 0;
   MemoryEntry* current = memoryList;
   while(current){
-    if(current->pointers)
+    if(current->pointers){
       fprintf(stderr, "%d: %p\n", count, current->pointers);
       count++;
+    }
     current = current->next;
   }
   fprintf(stderr, "[DEBUG] memory with references: %d\n", count);
