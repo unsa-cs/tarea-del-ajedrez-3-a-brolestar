@@ -24,6 +24,7 @@ PointerNode* createPointerNode(void** pointer){
   PointerNode* node = (PointerNode*)malloc(sizeof(PointerNode));
   node->pointer = pointer;
   node->next = NULL;
+  fprintf(stderr, "PointerNode: %p apunta a %p\n" , node, *pointer);
   return node;
 }
 
@@ -33,6 +34,7 @@ MemoryEntry* createMemoryEntry(void* memory){
   entry->memory = memory;
   entry->pointers = NULL;
   entry->next = NULL;
+  fprintf(stderr, "MemoryEntry creado %p\n", entry);
   return entry;
 }
 
