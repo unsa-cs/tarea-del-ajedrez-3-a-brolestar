@@ -79,6 +79,7 @@ void unregisterPointer(void** pointer){
           prev->next = ptr->next;
         else
           current->pointers = ptr->next;
+        fprintf(stderr, "memoria desvinculada: %p\n", ptr);
         free(ptr);
         return;
       }
