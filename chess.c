@@ -16,8 +16,6 @@ void unlinkMemory(char** fig){
   for(int i = 0; fig[i]; i++)
     unregisterPointer((void**)&fig[i]);
   countMemoryEntries();
-  unregisterPointer((void**)fig);
-  countMemoryEntries();
 }
 
 char** reverse(char** fig){
@@ -36,6 +34,8 @@ char** reverse(char** fig){
   }
   newFig[rows] = 0;
   unlinkMemory(newFig);
+  unregisterPointer((void**)fig);
+  countMemoryEntries();
   return newFig;
 }
 
