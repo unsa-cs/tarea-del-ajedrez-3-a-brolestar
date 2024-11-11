@@ -3,13 +3,13 @@
 #include "chess.h"
 #include "gc.h"
 
-char** allocateMemory(int rows, size_t cols){
-  char** newFig;
-  memoryAlloc((void**)&newFig, sizeof(char*)*(rows + 1));
+void allocateMemory(char*** newFig, int rows, size_t cols){
+  /* char** newFig; */
+  memoryAlloc((void**)newFig, sizeof(char*)*(rows + 1));
   fprintf(stderr, "[DEBUG] Puntero nuevo newFig: %p\n", newFig);
   for(int i = 0; i < rows; i++)
-    memoryAlloc((void**)&newFig[i], sizeof(char)*(cols + 1));
-  return newFig;
+    memoryAlloc((void**)&(*newFig)[i], sizeof(char)*(cols + 1));
+  /* return newFig; */
 }
 
 void unlinkMemory(char*** fig){
@@ -29,13 +29,8 @@ char** reverse(char** fig){
   while(fig[0][++cols]);
 
   char** newFig;
-  //memoryAlloc((void**)&newFig, sizeof(char*)*(rows + 1));
-  memoryAlloc((void**)&newFig, sizeof(char*)*(rows + 1));
-  fprintf(stderr, "[DEBUG] Puntero nuevo newFig: %p\n", newFig);
-  for(int i = 0; i < rows; i++)
-    memoryAlloc((void**)&newFig[i], sizeof(char)*(cols + 1));
-  /* char** newFig = allocateMemory(rows, cols); */
-  
+  allocateMemory(&newFig, rows, cols);
+
   for(int i = 0; fig[i]; i++){
     for(int j = 0; fig[0][j]; j++)
       newFig[i][j] = fig[i][j];
