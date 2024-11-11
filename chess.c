@@ -6,8 +6,8 @@
 char** allocateMemory(int rows, size_t cols){
   char** newFig;
   memoryAlloc((void**)&newFig, sizeof(char*)*(rows + 1));
-  for(int i = 0; i < rows; i++)
-    memoryAlloc((void**)&newFig[i], sizeof(char)*(cols + 1));
+  //for(int i = 0; i < rows; i++)
+    //memoryAlloc((void**)&newFig[i], sizeof(char)*(cols + 1));
   return newFig;
 }
 
@@ -26,16 +26,18 @@ char** reverse(char** fig){
   while(fig[0][++cols]);
 
   char** newFig = allocateMemory(rows, cols);
-
+/*
   for(int i = 0; fig[i]; i++){
     for(int j = 0; fig[0][j]; j++)
       newFig[i][j] = fig[i][j];
     newFig[i][cols] = 0;
   }
   newFig[rows] = 0;
+*/
   fprintf(stderr,"%p\n", &newFig[rows]);
-  unlinkMemory(newFig);
-  unregisterPointer((void**)fig);
+  //unlinkMemory(newFig);
+  countMemoryEntries();
+  unregisterPointer((void**)&fig);
   countMemoryEntries();
   return newFig;
 }
