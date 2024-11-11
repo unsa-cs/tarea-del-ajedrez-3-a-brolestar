@@ -6,6 +6,7 @@
 char** allocateMemory(int rows, size_t cols){
   char** newFig;
   memoryAlloc((void**)&newFig, sizeof(char*)*(rows + 1));
+  fprintf(stderr, "[DEBUG] Puntero nuevo newFig: %p\n", newFig);
   for(int i = 0; i < rows; i++)
     memoryAlloc((void**)&newFig[i], sizeof(char)*(cols + 1));
   return newFig;
@@ -13,10 +14,10 @@ char** allocateMemory(int rows, size_t cols){
 
 void unlinkMemory(char*** fig){
   countMemoryEntries();
-  for(int i = 0; fig[i]; i++)
-    unregisterPointer((void**)*(&fig)[i]);
+  for(int i = 0; (*fig)[i]; i++)
+    unregisterPointer((void**) &((*fig)[i]));
   countMemoryEntries();
-  unregisterPointer((void**)fig);
+  unregisterPointer((void**)(fig));
   countMemoryEntries();
 }
 
@@ -27,10 +28,13 @@ char** reverse(char** fig){
   int cols = 0;
   while(fig[0][++cols]);
 
-  //char** newFig;
+  char** newFig;
   //memoryAlloc((void**)&newFig, sizeof(char*)*(rows + 1));
-
-  char** newFig = allocateMemory(rows, cols);
+  memoryAlloc((void**)&newFig, sizeof(char*)*(rows + 1));
+  fprintf(stderr, "[DEBUG] Puntero nuevo newFig: %p\n", newFig);
+  for(int i = 0; i < rows; i++)
+    memoryAlloc((void**)&newFig[i], sizeof(char)*(cols + 1));
+  /* char** newFig = allocateMemory(rows, cols); */
   
   for(int i = 0; fig[i]; i++){
     for(int j = 0; fig[0][j]; j++)
@@ -40,7 +44,8 @@ char** reverse(char** fig){
   newFig[rows] = 0;
   fprintf(stderr,"%p\n", &newFig);
   unlinkMemory(&newFig);
-  countMemoryEntries();
+  /* unregisterPointer((void**)&newFig); */
+  /* countMemoryEntries(); */
   return newFig;
 }
 
