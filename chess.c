@@ -12,10 +12,12 @@ char** allocateMemory(int rows, size_t cols){
 }
 
 void unlinkMemory(char** fig){
-  //countMemoryEntries();
-  for(int i = 0; fig[i]; i++)
-    unregisterPointer((void**)&fig[i]);
-  //countMemoryEntries();
+  countMemoryEntries();
+  unregisterPointer((void**)&fig);
+  countMemoryEntries();
+  //for(int i = 0; fig[i]; i++)
+    //unregisterPointer((void**)&fig[i]);
+  countMemoryEntries();
 }
 
 char** reverse(char** fig){
@@ -38,9 +40,7 @@ char** reverse(char** fig){
   newFig[rows] = 0;
 */
   fprintf(stderr,"%p\n", &newFig);
-  //unlinkMemory(newFig);
-  countMemoryEntries();
-  unregisterPointer((void**)&newFig);
+  unlinkMemory(newFig);
   countMemoryEntries();
   return newFig;
 }
