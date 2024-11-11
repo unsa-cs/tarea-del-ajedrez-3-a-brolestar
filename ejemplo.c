@@ -5,7 +5,7 @@
 void display(){
   
   char** blackSquare = reverse(whiteSquare);
-  interpreter(blackSquare);
+  interpreter(queen);
   garbageCollector();
   
   /*
