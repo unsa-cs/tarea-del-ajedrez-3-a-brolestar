@@ -76,5 +76,22 @@ char** repeatV(char **picture, int num){
   return result;
 }
 
+char** repeatH(char **figure, int num){
+  struct dimensions dim_figure = Dimensions(figure);
+  dim_figure.width = dim_figure.width * num;
+  char **result;
+  allocateMemory(&result, dim_figure.width, dim_figure.height);
+  for (int i = 0; i < dim_figure.height; i++) {
+    for (int j = 0; j<num; j++) {
+      for (int k=0; k< dim_figure.width; k++) {
+        result[i][k] = figure[i][k%(dim_figure.width/num)];
+      }
+    }
+    result[i][dim_figure.width] = 0;
+  }
+  result[dim_figure.height] = 0;
+  unlinkMemory(&result);
+  return result;
+}
 
 

@@ -5,8 +5,7 @@
 void display(){
   
   char** blackSquare = reverse(whiteSquare);
-  char** result = repeatV(blackSquare, 2);
-  interpreter(result);
+  interpreter(repeatH(repeatV(blackSquare, 8), 8));
   garbageCollector();
 
   /*
