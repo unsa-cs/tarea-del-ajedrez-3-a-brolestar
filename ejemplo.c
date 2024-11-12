@@ -5,9 +5,10 @@
 void display(){
   
   char** blackSquare = reverse(whiteSquare);
-  interpreter(queen);
+  char** result = repeatV(blackSquare, 2);
+  interpreter(result);
   garbageCollector();
-  
+
   /*
   char** matrix;
   memoryAlloc((void**)matrix, sizeof(char*)*3);
