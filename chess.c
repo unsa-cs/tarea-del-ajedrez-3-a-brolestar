@@ -19,14 +19,6 @@ struct dimensions Dimensions(char **picture) {
   return d;
 }
 
-char **init_picture(struct dimensions d){
-  char **empty_picture = (char**)malloc(sizeof(char*) * (d.height + 1));
-  for(int i=0; i<d.height; i++){
-    empty_picture[i] = (char*)malloc(sizeof(char) * (d.width + 1));
-  }
-  return empty_picture;
-}
-
 void allocateMemory(char*** newFig, int rows, size_t cols){
   /* char** newFig; */
   memoryAlloc((void**)newFig, sizeof(char*)*(rows + 1));
@@ -71,7 +63,8 @@ char** reverse(char** fig){
 char** repeatV(char **picture, int num){
   struct dimensions dim_picture = Dimensions(picture);
   dim_picture.height = dim_picture.height*num;
-  char **result = init_picture(dim_picture);
+  char **result;
+  allocateMemory(&result, dim_picture.height, dim_picture.width);
   for(int i=0;i<dim_picture.height;i++){
     for(int j=0;j<dim_picture.width;j++){
       result[i][j]=picture[i%(dim_picture.height/num)][j];
@@ -79,6 +72,7 @@ char** repeatV(char **picture, int num){
     result[i][dim_picture.width]=0;
   }
   result[dim_picture.height]=0;
+  unlinkMemory(&result);
   return result;
 }
 
