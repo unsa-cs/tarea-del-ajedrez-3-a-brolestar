@@ -53,7 +53,26 @@ void registerPointerToMemory(void** new_pointer, void* existing_memory){
 
 // Función para desvincular un puntero de la entrada de memoria correspondiente
 void unregisterPointer(void** pointer){
+  MemoryEntry* entry = memoryList;
   
+  while(entry){
+    PointerNode* current = entry->pointers; 
+    PointerNode* prev = NULL;
+
+    while(current){
+      if(current->pointer == pointer){
+        if(prev){
+          prev->next = current->next;
+        } else {
+          entry->pointers = current->next;
+        }
+        free(current);
+      }
+      prev = current;
+      current = current->next; 
+    }
+    entry = entry->next;
+  }
 }
 
 // Función de recolección de basura que libera memoria sin referencias activas
