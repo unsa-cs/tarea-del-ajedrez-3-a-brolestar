@@ -40,90 +40,27 @@ MemoryEntry* createMemoryEntry(void* memory){
 // Función para asignar memoria y registrar la entrada en el diccionario
 void memoryAlloc(void** pointer, size_t size){
   *pointer = malloc(size);
-  if(!(*pointer)){
-    fprintf(stderr, "Error al asignar memoria\n");
-    return;
-  }
-  MemoryEntry* entry = createMemoryEntry(*pointer);
-  entry->pointers = createPointerNode(pointer);
-  entry->next = memoryList;
-  memoryList = entry;
+  MemoryEntry *new_entry = createMemoryEntry(*pointer); 
+  new_entry->pointers = createPointerNode(pointer); 
+  new_entry->next = memoryList;
+  memoryList = new_entry;
 }
 
 // Función para agregar un puntero adicional que apunte a la misma memoria
 void registerPointerToMemory(void** new_pointer, void* existing_memory){
-  MemoryEntry* current = memoryList;
-  while(current){
-    if(current->memory == existing_memory){
-      PointerNode* newNode = createPointerNode(new_pointer);
-      newNode->next = current->pointers;
-      current->pointers = newNode;
-      *new_pointer = existing_memory;
-      return;
-    }
-    current = current->next;
-  }
-  fprintf(stderr, "Error: la memoria especificada no está registrada\n");
+  
 }
 
 // Función para desvincular un puntero de la entrada de memoria correspondiente
 void unregisterPointer(void** pointer){
-  MemoryEntry* current = memoryList;
-  fprintf(stderr, "[DEBUG] Desvinculando un pointer: %p , %p\n", pointer, *pointer);
-  while(current){
-    PointerNode* prev = NULL;
-    PointerNode* ptr = current->pointers;
-    while(ptr){
-      if(ptr->pointer == pointer){
-        //fprintf(stderr,"%p\n", pointer);
-        if(prev)
-          prev->next = ptr->next;
-        else
-          current->pointers = ptr->next;
-        fprintf(stderr, "memoria desvinculada: %p\n", ptr);
-        free(ptr);
-        return;
-      }
-      prev = ptr;
-      ptr = ptr->next;
-    }
-    current = current->next;
-  }
+  
 }
 
 // Función de recolección de basura que libera memoria sin referencias activas
 void garbageCollector(){
-  MemoryEntry* prevEntry = NULL;
-  MemoryEntry* currentEntry = memoryList;
-  while(currentEntry){
-    if(currentEntry->pointers){
-      prevEntry = currentEntry;
-      currentEntry = currentEntry->next;
-    }else{
-      // Sin referencias activas, liberar memoria
-      free(currentEntry->memory);
-      if(prevEntry)
-        prevEntry->next = currentEntry->next;
-      else
-        memoryList = currentEntry->next;
-      MemoryEntry* toFree = currentEntry;
-      currentEntry = currentEntry->next;
-      free(toFree);
-    }
-  }
+  
 }
 
 int countMemoryEntries(){
-  int count = 0;
-  MemoryEntry* current = memoryList;
-  while(current){
-    if(current->pointers){
-      fprintf(stderr, "%d: %p\n", count, current->pointers);
-      count++;
-    }
-    current = current->next;
-  }
-  fprintf(stderr, "[DEBUG] memory with references: %d\n", count);
-  return count;
+  
 }
-

@@ -27,6 +27,7 @@ void display(){
   fprintf(stderr,"Direccion: %p - %p\n", var, newVar);
   countMemoryEntries();
   unregisterPointer((void**)&var);
+  unregisterPointer((void**)&newVar);
   garbageCollector();
   countMemoryEntries();
 }

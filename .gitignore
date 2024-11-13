@@ -62,3 +62,4 @@ dkms.conf
 *swp
 *.o
 ejemplo
+gc_original.c
