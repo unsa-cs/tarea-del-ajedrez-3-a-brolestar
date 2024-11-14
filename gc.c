@@ -46,7 +46,7 @@ MemoryEntry* createMemoryEntry(void* memory){
   entry->memory = memory;
   entry->pointer = NULL;
   entry->next = NULL;
-  fprintf(stderr, "Creado puntero con memoria: %p\n", memory);
+  //fprintf(stderr, "Creado puntero con memoria: %p\n", memory);
   return entry;
 }
 
@@ -73,7 +73,7 @@ void unregisterPointer(void** pointer){
   int counter = count(*pointer);
   while(entry && counter!=0){
     if(entry->pointer == pointer){
-      fprintf(stderr, "Desvinculando memoria %p - %p\n", pointer, *pointer);
+      //fprintf(stderr, "Desvinculando memoria %p - %p\n", pointer, *pointer);
       if(counter > 1) {
         deleteMemoryEntry(entry);
       } else {
@@ -89,21 +89,22 @@ void unregisterPointer(void** pointer){
 
 // Función de recolección de basura que libera memoria sin referencias activas
 void garbageCollector(){
+  static int que = 0;
   MemoryEntry* current = memoryList;
   MemoryEntry* prev = NULL;
   while (current) {  
     if (current->pointer == NULL) {
       free(current->memory);
-      if(prev == NULL){
-        memoryList = current->next;
-      } else {
-        prev->next = current->next;
-      }
-      free(current);
-      fprintf(stderr, "Liberando memoria: %p - MemoryEntry: %p\n", current->memory, current);
+      //fprintf(stderr, "Liberando memoria: %p - MemoryEntry: %p , %d\n", current->memory, current, que++);
     }
     prev = current;
     current = current->next;
+  }
+  MemoryEntry *node;
+  while (memoryList) {
+    node = memoryList;
+    memoryList = (memoryList)->next;
+    free(node);
   }
 }
 
@@ -118,4 +119,3 @@ int countMemoryEntries(){
   fprintf(stderr, "[DEBUG] memory with references: %d\n", count);
   return count;
 }
-

@@ -4,10 +4,7 @@
 #include <stdio.h>
 
 void display(){
-
   char** blackSquare = reverse(whiteSquare);
-  interpreter(repeatH(repeatV(blackSquare, 8), 8));
-  countMemoryEntries();
+  interpreter(repeatH(repeatV(whiteSquare, 8), 8));
   garbageCollector();
-  countMemoryEntries();
 }
