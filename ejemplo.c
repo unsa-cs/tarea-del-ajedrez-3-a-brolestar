@@ -20,6 +20,8 @@ void display(){
 
   float* var;
   memoryAlloc((void**)&var, sizeof(float)*5);
+  float* pointer;
+  registerPointerToMemory((void**)&pointer, var);
   unregisterPointer((void**)&var);
   garbageCollector();
 }

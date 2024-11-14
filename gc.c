@@ -12,6 +12,34 @@ typedef struct MemoryEntry{
 
 MemoryEntry* memoryList = NULL; // Lista enlazada para las entradas de memoria
 
+int count(void* memory) {
+  MemoryEntry* current = memoryList;
+  int counter = 0;
+  while(current) {
+    if(current->memory == memory)
+      counter++;
+    current = current->next;
+  }
+  return counter;
+}
+
+void deleteMemoryEntry(MemoryEntry* node) {
+  MemoryEntry* current = memoryList;
+  MemoryEntry* prev = NULL;
+  while(current) {
+    if(current == node) {
+      if(prev == NULL) {
+        memoryList = current->next;
+      } else {
+        prev->next = current->next;
+      }
+      free(current);
+    }
+    prev = current;
+    current = current->next;
+  }
+}
+
 // Función de ayuda para crear una nueva entrada de memoria
 MemoryEntry* createMemoryEntry(void* memory){
   MemoryEntry* entry = (MemoryEntry*)malloc(sizeof(MemoryEntry));
@@ -33,17 +61,24 @@ void memoryAlloc(void** pointer, size_t size){
 
 // Función para agregar un puntero adicional que apunte a la misma memoria
 void registerPointerToMemory(void** new_pointer, void* existing_memory){
-  
+  MemoryEntry* newNode = createMemoryEntry(existing_memory);
+  newNode->pointer = new_pointer;
+  newNode->next = memoryList;
+  memoryList = newNode;
 }
 
 // Función para desvincular un puntero de la entrada de memoria correspondiente
 void unregisterPointer(void** pointer){
   MemoryEntry* entry = memoryList;
-  while(entry){
+  int counter = count(*pointer);
+  while(entry && counter!=0){
     if(entry->pointer == pointer){
-
       fprintf(stderr, "Desvinculando memoria %p - %p\n", pointer, *pointer);
-      entry->pointer = NULL;
+      if(counter > 1) {
+        deleteMemoryEntry(entry);
+      } else {
+        entry->pointer = NULL;
+      }
       return;
     } else {
       /* prev = entry; */
