@@ -21,4 +21,5 @@ void display(){
   float* var;
   memoryAlloc((void**)&var, sizeof(float)*5);
   unregisterPointer((void**)&var);
+  garbageCollector();
 }

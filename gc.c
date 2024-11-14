@@ -39,19 +39,14 @@ void registerPointerToMemory(void** new_pointer, void* existing_memory){
 // Función para desvincular un puntero de la entrada de memoria correspondiente
 void unregisterPointer(void** pointer){
   MemoryEntry* entry = memoryList;
-  MemoryEntry* prev = NULL;
   while(entry){
     if(entry->pointer == pointer){
-      if(prev == NULL){
-        memoryList = entry->next;
-      } else {
-        prev->next = entry->next;
-      }
+
       fprintf(stderr, "Desvinculando memoria %p - %p\n", pointer, *pointer);
-      free(entry);
+      entry->pointer = NULL;
       return;
     } else {
-      prev = entry;
+      /* prev = entry; */
       entry = entry->next;
     }
   }
@@ -59,7 +54,22 @@ void unregisterPointer(void** pointer){
 
 // Función de recolección de basura que libera memoria sin referencias activas
 void garbageCollector(){
-  
+  MemoryEntry* current = memoryList;
+  MemoryEntry* prev = NULL;
+  while (current) {  
+    if (current->pointer == NULL) {
+      free(current->memory);
+      if(prev == NULL){
+        memoryList = current->next;
+      } else {
+        prev->next = current->next;
+      }
+      free(current);
+      fprintf(stderr, "Liberando memoria: %p - MemoryEntry: %p\n", current->memory, current);
+    }
+    prev = current;
+    current = current->next;
+  }
 }
 
 int countMemoryEntries(){
