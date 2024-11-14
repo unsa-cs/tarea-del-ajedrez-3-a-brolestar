@@ -18,16 +18,7 @@ void display(){
   garbageCollector();
   */
 
-
   float* var;
   memoryAlloc((void**)&var, sizeof(float)*5);
-  countMemoryEntries();
-  float* newVar;
-  registerPointerToMemory((void**)&newVar, var);
-  fprintf(stderr,"Direccion: %p - %p\n", var, newVar);
-  countMemoryEntries();
   unregisterPointer((void**)&var);
-  unregisterPointer((void**)&newVar);
-  garbageCollector();
-  countMemoryEntries();
 }

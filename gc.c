@@ -3,37 +3,22 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-// Definición de la estructura Node para manejar la lista de punteros en cada entrada de memoria
-typedef struct PointerNode{
-  void** pointer;
-  struct PointerNode* next;
-} PointerNode;
-
 // Definición de la estructura MemoryEntry para el diccionario de la memoria reservada
 typedef struct MemoryEntry{
   void* memory;
-  PointerNode* pointers;
+  void** pointer;
   struct MemoryEntry* next;
 } MemoryEntry;
 
 MemoryEntry* memoryList = NULL; // Lista enlazada para las entradas de memoria
 
-// Función de ayuda para crear un nuevo nodo de puntero
-PointerNode* createPointerNode(void** pointer){
-  PointerNode* node = (PointerNode*)malloc(sizeof(PointerNode));
-  node->pointer = pointer;
-  node->next = NULL;
-  fprintf(stderr, "PointerNode: %p apunta a %p\n" , node, *pointer);
-  return node;
-}
-
 // Función de ayuda para crear una nueva entrada de memoria
 MemoryEntry* createMemoryEntry(void* memory){
   MemoryEntry* entry = (MemoryEntry*)malloc(sizeof(MemoryEntry));
   entry->memory = memory;
-  entry->pointers = NULL;
+  entry->pointer = NULL;
   entry->next = NULL;
-  fprintf(stderr, "MemoryEntry creado %p\n", entry);
+  fprintf(stderr, "Creado puntero con memoria: %p\n", memory);
   return entry;
 }
 
@@ -41,7 +26,7 @@ MemoryEntry* createMemoryEntry(void* memory){
 void memoryAlloc(void** pointer, size_t size){
   *pointer = malloc(size);
   MemoryEntry *new_entry = createMemoryEntry(*pointer); 
-  new_entry->pointers = createPointerNode(pointer); 
+  new_entry->pointer = pointer; 
   new_entry->next = memoryList;
   memoryList = new_entry;
 }
@@ -54,24 +39,21 @@ void registerPointerToMemory(void** new_pointer, void* existing_memory){
 // Función para desvincular un puntero de la entrada de memoria correspondiente
 void unregisterPointer(void** pointer){
   MemoryEntry* entry = memoryList;
-  
+  MemoryEntry* prev = NULL;
   while(entry){
-    PointerNode* current = entry->pointers; 
-    PointerNode* prev = NULL;
-
-    while(current){
-      if(current->pointer == pointer){
-        if(prev){
-          prev->next = current->next;
-        } else {
-          entry->pointers = current->next;
-        }
-        free(current);
+    if(entry->pointer == pointer){
+      if(prev == NULL){
+        memoryList = entry->next;
+      } else {
+        prev->next = entry->next;
       }
-      prev = current;
-      current = current->next; 
+      fprintf(stderr, "Desvinculando memoria %p - %p\n", pointer, *pointer);
+      free(entry);
+      return;
+    } else {
+      prev = entry;
+      entry = entry->next;
     }
-    entry = entry->next;
   }
 }
 
